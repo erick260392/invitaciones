@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('guests', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->boolean('attending')->default(true);
+            $table->foreignId('invitation_id')->constrained();
             $table->timestamps();
         });
     }
