@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_id'   
     ];
 
     /**
@@ -45,4 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+     // Añade esta relación
+     public function invitations()
+     {
+         return $this->hasMany(Invitation::class);
+     }
 }

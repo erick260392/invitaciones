@@ -21,6 +21,7 @@ class InvitationController extends Controller
      */
     public function create()
     {
+
         return view('invitations.create');
     }
 
@@ -35,20 +36,26 @@ class InvitationController extends Controller
             'bride_name' => 'required',
             'event_date' => 'required|date',
             'location' => 'required',
+            'description' => 'nullable' // ← Campo opcional
         ]);
 
+        // El unique_code se genera automáticamente desde el modelo
         Auth::user()->invitations()->create($validated);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('success', 'Invitación creada!');
     }
-
     /**
      * Display the specified resource.
      */
-    public function show(Invitation $invitation)
-    {
-        //
-    }
+  // Método para mostrar la invitación pública
+  public function show($unique_code)
+  {
+      $invitation = Invitation::where('unique_code', $unique_code)
+          ->with('guests') // Carga los invitados relacionados
+          ->firstOrFail();
+
+      return view('invitations.show', compact('invitation'));
+  }
 
     /**
      * Show the form for editing the specified resource.
